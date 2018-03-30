@@ -556,6 +556,10 @@ core-js@^2.4.0, core-js@^2.5.0:
   version "2.5.3"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.3.tgz#8acc38345824f16d8365b7c9b4259168e8ed603e"
 
+crocks@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/crocks/-/crocks-0.9.0.tgz#dff48c1f3e9effda0c0f479f7da2ddb3a0af151e"
+
 data.maybe@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/data.maybe/-/data.maybe-1.2.2.tgz#f955e4b5572b2eb5047eab93d8bb3a1cc76a2dc3"

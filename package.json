@@ -7,6 +7,7 @@
     "babel-plugin-transform-function-bind": "^6.22.0",
     "babel-plugin-transform-metamagical-comments": "^0.15.0",
     "babel-preset-env": "^1.6.1",
+    "crocks": "^0.9.0",
     "folktale": "^2.1.0",
     "metamagical-interface": "^3.5.0",
     "metamagical-mocha-bridge": "^0.4.0",
