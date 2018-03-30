@@ -1,0 +1,8 @@
+{
+  "presets": ["env"],
+  "plugins": [
+    "transform-function-bind",
+    "transform-metamagical-comments",
+    "transform-assertion-comments"
+  ]
+}
