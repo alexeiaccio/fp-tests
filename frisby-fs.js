@@ -1,4 +1,4 @@
-const fs =require('fs')
+const fs = require('fs')
 
 const Right = x =>
 ({
@@ -77,3 +77,14 @@ app
 .run().future()
 .map(x => console.log('Success'))
 .mapRejected(e => console.log('Error', e))
+
+const { List } = require('immutable-ext')
+const { of } = require('folktale/concurrency/future')
+
+const readFile3 = x => enc => Task.of(fs.readFile(x, enc)).run().future()
+
+const files = List(['frisby.json', 'frisby2.json'])
+
+
+files.traverse(Task.of, fn => readFile3(fn, 'utf-8'))
+.map(x => console.log('task', x))
