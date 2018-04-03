@@ -58,6 +58,7 @@ typings/
 .env
 
 # Parcel
-.cache/
-dist/
-.cache/*.json
+*cache*
+*dist*
+dist/*
+.cache/*

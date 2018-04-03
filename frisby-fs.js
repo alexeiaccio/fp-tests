@@ -38,3 +38,42 @@ console.log(
   getPort('frisby-fail'),
   getPort('frisb'),
 )
+
+const readFile = x => tryCatch(() => fs.readFileSync(x, 'utf-8'))
+
+const wrapExample = example =>
+  fromNullable(example.path)
+  .chain(readFile)
+  .map(JSON.parse)
+  .fold(() => example,
+        preview => Object.assign({}, example, { preview }))
+
+console.log(
+  wrapExample({ path: './frisby.json'}),
+  wrapExample({ path: null}),
+)
+
+const Task = require('folktale/concurrency/task')
+const { task } = Task
+
+const readFile2 = (filename, enc) =>
+  task((resolver) =>
+    fs.readFile(filename, enc, (err, success) =>
+      err ? resolver.reject(err)
+      :     resolver.resolve(success)))
+
+const writeFile2 = (filename, contents) =>
+  task((resolver) =>
+    fs.writeFile(filename, contents, (err, success) =>
+    err ? resolver.reject(err)
+    :     resolver.resolve(success)))
+
+const app =
+  readFile2('frisby.json', 'utf-8')
+  .map(c => c.replace(/8/g, '6'))
+  .chain(c => writeFile2('frisby2.json', c))
+
+app
+.run().future()
+.map(x => console.log('Success'))
+.mapRejected(e => console.log('Error', e))
