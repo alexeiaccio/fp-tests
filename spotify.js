@@ -3,31 +3,37 @@
 
 import request from 'request'
 import Task, { task } from 'folktale/concurrency/task'
-import Maybe from 'folktale/maybe'
+import Result from 'folktale/result'
+//import Maybe from 'folktale/maybe'
 
 const httpGet = url =>
   task(resolver =>
-  request(url, { auth: { 'bearer': 'BQBW9j6grWA1N__j_3IU5NJw2fY8npoowyH4fdc9JZ_g_3cW2hltY7QK1ElX0gPAiKkncrnw7FsWBva88wl3ImbRpEcZQIkO6FxBF4vTuItQc-oMdALyUeQaoKyAbl3xVHGZ2XKoWW0Tv4SSMEK3tUj7fI4ZkZeWFcGV'} }, (error, response, body) =>
-    error ? resolver.reject(error): resolver.resolve(body)))
+    request(url, { auth: { 'bearer': 'BQCz-3K73cFKvby46bcXgBT1e2tt7JufxQbdfOouvlTOlsL56uN3Med_KUBECUFkWEre2KWBe43rNdY6aevGfDDjjQwYiQS7iYbbbx5l3F6YRv3NVwCmS0rp0deJNdwpQfpP6-IfvwIGfzywGWtH4AvOkDOSoHlxGBIS'} }, (error, response, body) =>
+      error ? resolver.reject(error): resolver.resolve(body)))
 
 const getJSON = url =>
     httpGet(url)
-    .run().future()
-    .map(JSON.parse)
+    .map(parse)
+    .chain(resultToTask)
 
-const first = xs => Maybe.fromNullable(xs[0])
+const first = xs => Result.fromNullable(xs[0], 'Error on get first')
 
-const maybeToTask = e =>
-  e.map(Task.of).getOrElse(Task.rejected)
+const resultToTask = e =>
+  e.matchWith({
+    Error: (x) => Task.rejected(x),
+    Ok:    (x) => Task.of(x.value)
+  })
+
+const parse = x => Result.try(_ => JSON.parse(x))
 
 const findArtist = name =>
   getJSON(`https://api.spotify.com/v1/search?q=${name}&type=artist`)
   .map(result => result.artists.items)
   .map(first)
-  //.chain(maybeToTask)
+  .chain(resultToTask)
 
   const relatedArtists = id =>
-    getJSON(`https://api.spotify.com//v1/artists/${id}/related-artists`)
+    getJSON(`https://api.spotify.com/v1/artists/${id}/related-artists`)
     .map(result => result.artists)
 
 module.exports = {
