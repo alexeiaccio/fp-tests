@@ -47,10 +47,7 @@ Object.defineProperty(Foo.prototype, 'constructor', {
   value: Foo
 })
 
-console.log(Foo.prototype.constructor) //​​​​​[λ: Foo]​​​​​
-
-const a = new Foo()
-
+console.log(Foo.prototype.constructor) //​​​​​[λ: Foo]​​​​​P|
 console.log(a.constructor === Foo) //true
 console.log(a.constructor === Object) //false
 
